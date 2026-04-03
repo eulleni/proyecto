@@ -33,18 +33,18 @@ Stack Tecnológico
 
  Índice
 
-- [Instalación del sistema]
-- [Configuración de red]
-- [Gestión de usuarios]
-- [Permisos y grupos]
-- [Acceso remoto]
-- [Servidor web]
-- [Aplicación de tickets]
-- [Base de datos]
-- [Sistema de correo]
-- [Problemas y soluciones]
-- [Estado final]
-- [Mejoras futuras]
+- Instalación del sistema
+- Configuración de red
+- Gestión de usuarios
+- Permisos y grupos
+- Acceso remoto
+- Servidor web
+- Aplicación de tickets
+- Base de datos
+- Sistema de correo
+- Problemas y soluciones
+- Estado final
+- Mejoras futuras
 
 #  Introducción
 
