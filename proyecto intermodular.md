@@ -7,23 +7,44 @@
 
 ---
 
-#  Índice
-
-* [ Introducción](#-introducción)
-* [ Instalación del sistema](#-instalación-del-sistema)
-* [ Entorno gráfico (Xubuntu)](#️-entorno-gráfico-xubuntu)
-* [ Servicio de correo](#-servicio-de-correo)
-* [ Gestión de usuarios](#-gestión-de-usuarios)
-* [ Permisos y directorios](#-permisos-y-directorios)
-* [ Acceso remoto (SSH + WinSCP)](#-acceso-remoto-ssh--winscp)
-* [ Webmin](#️-webmin)
-* [ Gestión avanzada de usuarios](#-gestión-avanzada-de-usuarios)
-* [ Aplicación web (Sistema de tickets)](#-aplicación-web-sistema-de-tickets)
-* [ Acceso remoto con AnyDesk](#️-acceso-remoto-con-anydesk)
-* [ Mejoras futuras](#-mejoras-futuras)
-* [ Conclusión](#-conclusión)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-orange)
+![Apache](https://img.shields.io/badge/Apache-2.4-blue)
+![PHP](https://img.shields.io/badge/PHP-8.x-purple)
+![MySQL](https://img.shields.io/badge/MySQL-Database-blue)
+![Status](https://img.shields.io/badge/Status-Completed-success)
 
 ---
+
+Stack Tecnológico
+
+| Categoría | Tecnología |
+|----------|-----------|
+| Sistema Operativo | Ubuntu Server 22.04 |
+| Entorno gráfico | Xubuntu Desktop |
+| Web Server | Apache2 |
+| Backend | PHP |
+| Base de datos | MySQL / MariaDB |
+| Gestión DB | phpMyAdmin |
+| Administración | Webmin |
+| Correo | Postfix + Dovecot |
+| Webmail | Roundcube |
+| Acceso remoto | SSH, WinSCP, AnyDesk |
+
+
+ Índice
+
+- [Instalación del sistema](#-instalación-del-sistema)
+- [Configuración de red](#-configuración-de-red)
+- [Gestión de usuarios](#-gestión-de-usuarios)
+- [Permisos y grupos](#-permisos-y-grupos)
+- [Acceso remoto](#-acceso-remoto)
+- [Servidor web](#-servidor-web)
+- [Aplicación de tickets](#-aplicación-de-tickets)
+- [Base de datos](#-base-de-datos)
+- [Sistema de correo](#-sistema-de-correo)
+- [Problemas y soluciones](#-problemas-y-soluciones)
+- [Estado final](#-estado-final)
+- [Mejoras futuras](#-mejoras-futuras)
 
 #  Introducción
 
