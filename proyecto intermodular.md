@@ -1,328 +1,225 @@
-# 🖥️ Intranet Empresarial - Proyecto Intermodular ASIX
+#  Proyecto Intermodular - Intranet Empresarial Linux
 
-![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-orange)
-![Apache](https://img.shields.io/badge/Apache-2.4-blue)
-![PHP](https://img.shields.io/badge/PHP-8.x-purple)
-![MySQL](https://img.shields.io/badge/MySQL-Database-blue)
-![Status](https://img.shields.io/badge/Status-Completed-success)
+##  Autor
 
----
-
-##  Descripción
-
-Este proyecto consiste en la implementación de una **intranet empresarial completa** sobre un servidor Linux, integrando servicios de red, administración remota, aplicación web y sistema de correo interno.
-
-El objetivo es simular un entorno real de empresa donde se centralizan servicios y gestión de incidencias.
+**Eugenio Requena Castillo**
+**2º ASIX - IES Serra Perenxisa**
 
 ---
 
-##  Objetivos
+#  Índice
 
-- Implementar un servidor Linux funcional
-- Gestionar usuarios y permisos
-- Desplegar servicios web
-- Desarrollar una aplicación interna (tickets)
-- Configurar un sistema de correo interno
-- Permitir administración remota completa
-
----
-
-##  Stack Tecnológico
-
-| Categoría | Tecnología |
-|----------|-----------|
-| Sistema Operativo | Ubuntu Server 22.04 |
-| Entorno gráfico | Xubuntu Desktop |
-| Web Server | Apache2 |
-| Backend | PHP |
-| Base de datos | MySQL / MariaDB |
-| Gestión DB | phpMyAdmin |
-| Administración | Webmin |
-| Correo | Postfix + Dovecot |
-| Webmail | Roundcube |
-| Acceso remoto | SSH, WinSCP, AnyDesk |
+* [ Introducción](#-introducción)
+* [ Instalación del sistema](#-instalación-del-sistema)
+* [ Entorno gráfico (Xubuntu)](#️-entorno-gráfico-xubuntu)
+* [ Servicio de correo](#-servicio-de-correo)
+* [ Gestión de usuarios](#-gestión-de-usuarios)
+* [ Permisos y directorios](#-permisos-y-directorios)
+* [ Acceso remoto (SSH + WinSCP)](#-acceso-remoto-ssh--winscp)
+* [ Webmin](#️-webmin)
+* [ Gestión avanzada de usuarios](#-gestión-avanzada-de-usuarios)
+* [ Aplicación web (Sistema de tickets)](#-aplicación-web-sistema-de-tickets)
+* [ Acceso remoto con AnyDesk](#️-acceso-remoto-con-anydesk)
+* [ Mejoras futuras](#-mejoras-futuras)
+* [ Conclusión](#-conclusión)
 
 ---
 
-##  Índice
+#  Introducción
 
-- [Instalación del sistema](#-instalación-del-sistema)
-- [Configuración de red](#-configuración-de-red)
-- [Gestión de usuarios](#-gestión-de-usuarios)
-- [Permisos y grupos](#-permisos-y-grupos)
-- [Acceso remoto](#-acceso-remoto)
-- [Servidor web](#-servidor-web)
-- [Aplicación de tickets](#-aplicación-de-tickets)
-- [Base de datos](#-base-de-datos)
-- [Sistema de correo](#-sistema-de-correo)
-- [Problemas y soluciones](#-problemas-y-soluciones)
-- [Estado final](#-estado-final)
-- [Mejoras futuras](#-mejoras-futuras)
+Este proyecto intermodular consiste en el diseño e implementación de una **intranet empresarial basada en un servidor Linux**, integrando múltiples servicios reales utilizados en entornos profesionales.
+
+El sistema desarrollado permite:
+
+* Gestión de usuarios
+* Control de permisos
+* Administración remota
+* Servicio de correo interno
+* Aplicación web de gestión de incidencias (sistema de tickets)
+
+Se han utilizado tecnologías como:
+
+* Ubuntu Server 22.04 LTS
+* Apache
+* PHP
+* MySQL / MariaDB
+* Postfix
+* Dovecot
+* Roundcube
+* Webmin
+* SSH
+* WinSCP
+* AnyDesk
 
 ---
 
-##  Instalación del sistema
+#  Instalación del sistema
 
-Se utilizó **Ubuntu Server 22.04 LTS**, elegido por su estabilidad y uso en entornos profesionales.
+Se instaló **Ubuntu Server 22.04 LTS**, seleccionando la instalación de servidor estándar desde el instalador oficial.
 
-Actualización del sistema:
+Tras la instalación, se realizó la actualización completa del sistema:
+
+```
 sudo apt update && sudo apt upgrade
+```
 
-Instalación de entorno gráfico ligero:
+---
+
+#  Entorno gráfico (Xubuntu)
+
+Para facilitar la administración del sistema y poder trabajar de forma más visual, se instaló Xubuntu Desktop:
+
+```
 sudo apt install xubuntu-desktop
+```
 
-Esto permitió facilitar la administración visual y la documentación del proyecto.
-
----
-
-##  Configuración de red
-
-Se configuró una IP estática mediante Netplan para evitar cambios en la dirección IP del servidor.
-
-Archivo de configuración:
-/etc/netplan/00-installer-config.yaml
-
-Aplicación:
-sudo netplan apply
-
-Esto garantiza acceso constante al servidor dentro de la red.
+Se trata de un entorno ligero que permite gestionar el sistema sin comprometer el rendimiento.
 
 ---
 
-##  Gestión de usuarios
+#  Servicio de correo
 
-Creación inicial:
-sudo useradd usuario
+Se implementó un sistema de correo interno utilizando:
 
-Posteriormente se utilizó **Webmin** para completar la configuración:
+* **Postfix** → SMTP
+* **Dovecot** → IMAP
+* **Roundcube** → Webmail
 
-- Creación de directorios /home
-- Asignación de shell (/bin/bash)
-- Configuración de contraseñas
+### Problemas solucionados:
 
-Usuarios creados:
-- cliente1
-- soporte
-
----
-
-##  Permisos y grupos
-
-Se crearon grupos para estructurar el acceso:
-
-- secretaria
-- ventas
-
-Directorios:
-/srv/
-
-Configuración:
-chmod 770
-chown root:grupo
-
-Esto garantiza acceso restringido por departamentos.
+* Error de conexión a base de datos
+* Error SMTP connection failed
+* Error SMTP authentication failed
+* Error 404 en Roundcube
 
 ---
 
-##  Acceso remoto
+#  Gestión de usuarios
 
-### SSH
-Permite administración por terminal:
-sudo systemctl status ssh
+Inicialmente se utilizó `useradd`, pero se completó la configuración con Webmin para:
 
----
+* Crear directorios personales
+* Asignar shell `/bin/bash`
+* Configurar contraseñas
 
-### WinSCP
-Utilizado para transferencia de archivos vía SFTP:
+También se crearon grupos como:
 
-- Subida de archivos
-- Edición remota
-- Gestión de permisos
+* secretaria
+* ventas
 
 ---
 
-### AnyDesk
+#  Permisos y directorios
 
-Se utilizó AnyDesk para acceso remoto gráfico completo.
+Se crearon directorios en `/srv` para cada departamento y se configuraron permisos:
+
+```
+chown root:grupo carpeta
+chmod 770 carpeta
+```
+
+Esto permite acceso solo a usuarios del grupo correspondiente.
+
+---
+
+#  Acceso remoto (SSH + WinSCP)
+
+## SSH
+
+Permite administrar el servidor remotamente:
+
+```
+systemctl status ssh
+```
+
+## WinSCP
 
 Permite:
-- Control total del servidor
-- Acceso desde móvil o PC
-- Gestión del entorno gráfico
 
-Especialmente útil para pruebas en clase y administración rápida.
+* Transferir archivos
+* Editar ficheros
+* Gestionar permisos
 
 ---
 
-##  Administración con Webmin
+#  Webmin
 
-Acceso:
-https://IP:10000
+Herramienta de administración web del sistema.
+
+### Problema:
+
+Error de clave GPG
+
+### Solución:
+
+Actualizar repositorio y clave
+
+---
+
+#  Gestión avanzada de usuarios
+
+Desde Webmin:
+
+* Creación automática de `/home`
+* Expiración de contraseñas
+* Asignación a grupos secundarios
+
+---
+
+#  Aplicación web (Sistema de tickets)
+
+Aplicación desarrollada en PHP y MySQL.
+
+### Funcionalidades:
+
+* Crear incidencias
+* Ver estado
+* Asignar técnicos
+* Cambiar estado
+* Prioridad automática
+
+### Panel admin:
+
+* Protegido por sesión
+* Gestión centralizada
+
+---
+
+#  Acceso remoto con AnyDesk
 
 Permite:
-- Gestión de usuarios
-- Configuración de servicios
-- Administración del sistema
 
-Se resolvió un problema inicial de repositorio GPG durante la instalación.
-
----
-
-##  Servidor web
-
-Instalación:
-sudo apt install apache2
-
-Directorio principal:
-/var/www/html/
-
-Servicios desplegados:
-- phpMyAdmin
-- Aplicación de tickets
-- Roundcube
+* Control gráfico del servidor
+* Acceso desde móvil o PC
+* Administración remota completa
 
 ---
 
-##  Aplicación de tickets
+#  Mejoras futuras
 
-Aplicación desarrollada en **PHP + MySQL**.
-
-Funcionalidades:
-- Creación de incidencias
-- Seguimiento de tickets
-- Estados (abierto, en progreso, cerrado)
-- Asignación de técnicos
-- Panel de administración
-
-Ubicación:
-/var/www/html/ticketing
-
-Simula un sistema real de soporte técnico.
+* Notificaciones por correo
+* Sistema de roles
+* Interfaz con Bootstrap
+* Integración externa
+* Migración a AWS
 
 ---
 
-##  Base de datos
+#  Conclusión
 
-Uso de MySQL para:
+Se ha desarrollado una intranet completa integrando múltiples servicios.
 
-- Tickets
-- Usuarios
-- Roundcube
+Se han resuelto problemas reales de:
 
-Gestión mediante phpMyAdmin.
+* Correo
+* Permisos
+* Seguridad
+* Configuración
 
-Acceso root solucionado con:
-sudo mysql
+ Resultado:
 
----
-
-##  Sistema de correo
-
-Implementación completa:
-
-### Postfix (SMTP)
-Servidor de envío de correos.
-
-### Dovecot (IMAP)
-Servidor de recepción.
-
-### Roundcube
-Interfaz web:
-http://IP/roundcube
+* Sistema funcional
+* Escalable
+* Preparado para entornos reales
 
 ---
-
-##  Buzones de correo
-
-Creación:
-maildirmake.dovecot ~/Maildir
-
-Permite almacenamiento estructurado de correos.
-
----
-
-##  Problemas y soluciones
-
-### Roundcube Internal Error
-Problema:
-Fallo de conexión a base de datos.
-
-Solución:
-Configuración manual en config.inc.php
-
----
-
-### Error 404 Roundcube
-Problema:
-Ruta inexistente en Apache.
-
-Solución:
-sudo ln -s /var/lib/roundcube /var/www/html/roundcube
-
----
-
-### Error SMTP Connection failed
-Problema:
-Servidor no accesible.
-
-Solución:
-sudo systemctl restart postfix
-
----
-
-### Error SMTP Authentication failed
-Problema:
-Fallo de autenticación.
-
-Solución:
-$config['smtp_user'] = '%u';
-$config['smtp_pass'] = '%p';
-
----
-
-### IP dinámica
-Solución:
-Configuración con Netplan.
-
----
-
-### Error MySQL root
-Solución:
-sudo mysql
-
----
-
-##  Estado final
-
-Sistema completamente funcional:
-
-- Gestión de usuarios ✔
-- Acceso remoto ✔
-- Webmin ✔
-- Aplicación de tickets ✔
-- Correo interno ✔
-
----
-
-##  Mejoras futuras
-
-- Notificaciones automáticas por correo
-- Mejora de interfaz (Bootstrap)
-- Roles avanzados
-- Despliegue en AWS
-- Seguridad avanzada
-
----
-
-##  Conclusión
-
-Se ha desarrollado una intranet completa integrando múltiples servicios en un único servidor Linux.
-
-El proyecto ha permitido adquirir experiencia práctica en:
-
-- Administración de sistemas
-- Redes
-- Servicios web
-- Resolución de errores reales
-
-El resultado es un sistema funcional, escalable y aplicable a entornos empresariales reales.
