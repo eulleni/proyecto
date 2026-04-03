@@ -1,6 +1,6 @@
-#  Proyecto Intermodular - Intranet Empresarial Linux
+# 🖥️ Proyecto Intermodular - Intranet Empresarial Linux
 
-##  Autor
+## 👤 Autor
 
 **Eugenio Requena Castillo**
 **2º ASIX - IES Serra Perenxisa**
@@ -15,232 +15,379 @@
 
 ---
 
-Stack Tecnológico
+# 🧱 Stack Tecnológico
 
-| Categoría | Tecnología |
-|----------|-----------|
-| Sistema Operativo | Ubuntu Server 22.04 |
-| Entorno gráfico | Xubuntu Desktop |
-| Web Server | Apache2 |
-| Backend | PHP |
-| Base de datos | MySQL / MariaDB |
-| Gestión DB | phpMyAdmin |
-| Administración | Webmin |
-| Correo | Postfix + Dovecot |
-| Webmail | Roundcube |
-| Acceso remoto | SSH, WinSCP, AnyDesk |
+| Categoría         | Tecnología           |
+| ----------------- | -------------------- |
+| Sistema Operativo | Ubuntu Server 22.04  |
+| Entorno gráfico   | Xubuntu Desktop      |
+| Web Server        | Apache2              |
+| Backend           | PHP                  |
+| Base de datos     | MySQL / MariaDB      |
+| Gestión DB        | phpMyAdmin           |
+| Administración    | Webmin               |
+| Correo            | Postfix + Dovecot    |
+| Webmail           | Roundcube            |
+| Acceso remoto     | SSH, WinSCP, AnyDesk |
 
+---
 
- Índice
+# 📌 Índice
 
-- Instalación del sistema
-- Configuración de red
-- Gestión de usuarios
-- Permisos y grupos
-- Acceso remoto
-- Servidor web
-- Aplicación de tickets
-- Base de datos
-- Sistema de correo
-- Problemas y soluciones
-- Estado final
-- Mejoras futuras
+* [Introducción](#-introducción)
+* [Instalación del sistema](#-instalación-del-sistema)
+* [Entorno gráfico](#-entorno-gráfico-xubuntu)
+* [Servicio de correo](#-servicio-de-correo)
+* [Gestión de usuarios](#-gestión-de-usuarios)
+* [Permisos y directorios](#-permisos-y-directorios)
+* [Acceso remoto](#-acceso-remoto-ssh--winscp)
+* [Servidor web](#-servidor-web-apache)
+* [Aplicación de tickets](#-aplicación-web-sistema-de-tickets)
+* [Base de datos](#-base-de-datos)
+* [Webmin](#-webmin)
+* [AnyDesk](#-acceso-remoto-con-anydesk)
+* [Problemas y soluciones](#-problemas-y-soluciones)
+* [Mejoras futuras](#-mejoras-futuras)
+* [Conclusión](#-conclusión)
 
-#  Introducción
+---
 
-Este proyecto intermodular consiste en el diseño e implementación de una **intranet empresarial basada en un servidor Linux**, integrando múltiples servicios reales utilizados en entornos profesionales.
+# 🚀 Introducción
 
-El sistema desarrollado permite:
+Este proyecto consiste en la creación de una **intranet empresarial completa en Linux**, integrando servicios reales de administración de sistemas.
+
+Incluye:
 
 * Gestión de usuarios
 * Control de permisos
-* Administración remota
-* Servicio de correo interno
-* Aplicación web de gestión de incidencias (sistema de tickets)
-
-Se han utilizado tecnologías como:
-
-* Ubuntu Server 22.04 LTS
-* Apache
-* PHP
-* MySQL / MariaDB
-* Postfix
-* Dovecot
-* Roundcube
-* Webmin
-* SSH
-* WinSCP
-* AnyDesk
+* Sistema de correo
+* Aplicación web de tickets
+* Acceso remoto completo
 
 ---
 
-#  Instalación del sistema
+# 💿 Instalación del sistema
 
-Se instaló **Ubuntu Server 22.04 LTS**, seleccionando la instalación de servidor estándar desde el instalador oficial.
-
-Tras la instalación, se realizó la actualización completa del sistema:
-
-```
+```bash
 sudo apt update && sudo apt upgrade
 ```
 
+✔️ Mantiene el sistema actualizado y seguro.
+
 ---
 
-#  Entorno gráfico (Xubuntu)
+# 🖥️ Entorno gráfico (Xubuntu)
 
-Para facilitar la administración del sistema y poder trabajar de forma más visual, se instaló Xubuntu Desktop:
-
-```
+```bash
 sudo apt install xubuntu-desktop
 ```
 
-Se trata de un entorno ligero que permite gestionar el sistema sin comprometer el rendimiento.
+✔️ Permite:
+
+* Administración visual
+* Uso remoto gráfico (AnyDesk)
 
 ---
 
-#  Servicio de correo
+# 📧 Servicio de correo
 
-Se implementó un sistema de correo interno utilizando:
+## Instalación
 
-* **Postfix** → SMTP
-* **Dovecot** → IMAP
-* **Roundcube** → Webmail
-
-### Problemas solucionados:
-
-* Error de conexión a base de datos
-* Error SMTP connection failed
-* Error SMTP authentication failed
-* Error 404 en Roundcube
-
----
-
-#  Gestión de usuarios
-
-Inicialmente se utilizó `useradd`, pero se completó la configuración con Webmin para:
-
-* Crear directorios personales
-* Asignar shell `/bin/bash`
-* Configurar contraseñas
-
-También se crearon grupos como:
-
-* secretaria
-* ventas
-
----
-
-#  Permisos y directorios
-
-Se crearon directorios en `/srv` para cada departamento y se configuraron permisos:
-
-```
-chown root:grupo carpeta
-chmod 770 carpeta
+```bash
+sudo apt install postfix dovecot-imapd dovecot-pop3d roundcube
 ```
 
-Esto permite acceso solo a usuarios del grupo correspondiente.
+---
+
+## 📥 Acceso a Roundcube
+
+Desde navegador:
+
+```
+http://IP_DEL_SERVIDOR/roundcube
+```
+
+Ejemplo:
+
+```
+http://192.168.1.37/roundcube
+```
 
 ---
 
-#  Acceso remoto (SSH + WinSCP)
+## 📬 Crear buzones
 
-## SSH
-
-Permite administrar el servidor remotamente:
-
+```bash
+adduser usuario
+maildirmake.dovecot ~/Maildir
 ```
+
+---
+
+## 🔧 Reiniciar servicios
+
+```bash
+sudo systemctl restart postfix
+sudo systemctl restart dovecot
+```
+
+---
+
+# 👥 Gestión de usuarios
+
+## Crear usuario
+
+```bash
+sudo adduser nombre_usuario
+```
+
+## Añadir a grupo
+
+```bash
+sudo usermod -aG grupo usuario
+```
+
+## Ver grupos
+
+```bash
+groups usuario
+```
+
+---
+
+# 🔐 Permisos y directorios
+
+```bash
+sudo mkdir /srv/ventas
+sudo chown root:ventas /srv/ventas
+sudo chmod 770 /srv/ventas
+```
+
+✔️ Solo usuarios del grupo acceden.
+
+---
+
+# 🌐 Acceso remoto (SSH + WinSCP)
+
+## 🔐 SSH
+
+### Conexión desde otro equipo:
+
+```bash
+ssh usuario@IP_DEL_SERVIDOR
+```
+
+Ejemplo:
+
+```bash
+ssh erc01@192.168.1.37
+```
+
+---
+
+### Comprobar servicio:
+
+```bash
 systemctl status ssh
 ```
 
-## WinSCP
+---
 
-Permite:
+## 📂 WinSCP
+
+Configuración:
+
+* Protocolo: SFTP
+* IP: 192.168.1.37
+* Puerto: 22
+* Usuario + contraseña
+
+✔️ Permite:
 
 * Transferir archivos
-* Editar ficheros
-* Gestionar permisos
+* Editar directamente en servidor
 
 ---
 
-#  Webmin
+# 🌍 Servidor web (Apache)
 
-Herramienta de administración web del sistema.
+## Instalación
 
-### Problema:
+```bash
+sudo apt install apache2
+```
 
-Error de clave GPG
+## Comprobar estado
 
-### Solución:
+```bash
+systemctl status apache2
+```
 
-Actualizar repositorio y clave
+## Ruta web
+
+```
+/var/www/html/
+```
+
+## Acceso desde navegador
+
+```
+http://IP_DEL_SERVIDOR
+```
 
 ---
 
-#  Gestión avanzada de usuarios
+# 🗄️ Base de datos
 
-Desde Webmin:
+## Instalación
 
-* Creación automática de `/home`
-* Expiración de contraseñas
-* Asignación a grupos secundarios
+```bash
+sudo apt install mysql-server
+```
+
+## Acceso
+
+```bash
+sudo mysql
+```
+
+## phpMyAdmin
+
+```
+http://IP_DEL_SERVIDOR/phpmyadmin
+```
 
 ---
 
-#  Aplicación web (Sistema de tickets)
+# 🌍 Aplicación web (Sistema de tickets)
 
-Aplicación desarrollada en PHP y MySQL.
+Ubicación:
 
-### Funcionalidades:
+```
+/var/www/html/ticketing
+```
 
-* Crear incidencias
+## Acceso
+
+```
+http://IP/ticketing
+```
+
+---
+
+## Funcionalidades
+
+* Crear tickets
 * Ver estado
 * Asignar técnicos
 * Cambiar estado
 * Prioridad automática
 
-### Panel admin:
+---
 
-* Protegido por sesión
-* Gestión centralizada
+## Panel admin
+
+```
+http://IP/ticketing/admin_ver.php
+```
+
+✔️ Protegido por login
 
 ---
 
-#  Acceso remoto con AnyDesk
+# ⚙️ Webmin
 
-Permite:
+## Instalación
 
-* Control gráfico del servidor
-* Acceso desde móvil o PC
-* Administración remota completa
+```bash
+sudo apt install webmin
+```
 
 ---
 
-#  Mejoras futuras
+## Acceso
 
-* Notificaciones por correo
+```
+https://IP_DEL_SERVIDOR:10000
+```
+
+Ejemplo:
+
+```
+https://192.168.1.37:10000
+```
+
+---
+
+## Funcionalidades
+
+* Gestión de usuarios
+* Monitorización
+* Configuración de servicios
+
+---
+
+# 🖥️ Acceso remoto con AnyDesk
+
+## Instalación
+
+```bash
+sudo apt install anydesk
+```
+
+---
+
+## Uso
+
+* Abrir aplicación
+* Obtener ID
+* Conectarse desde otro dispositivo
+
+✔️ Permite:
+
+* Control gráfico completo
+* Acceso desde móvil
+
+---
+
+# ⚠️ Problemas y soluciones
+
+## ❌ Error SMTP
+
+✔️ Revisar Postfix y puertos
+
+## ❌ Error autenticación
+
+✔️ Configurar usuario correctamente
+
+## ❌ Error GPG Webmin
+
+✔️ Actualizar repositorio
+
+## ❌ Error 404 Roundcube
+
+✔️ Crear enlace simbólico
+
+---
+
+# 🚧 Mejoras futuras
+
+* Notificaciones automáticas por correo
 * Sistema de roles
-* Interfaz con Bootstrap
+* Interfaz Bootstrap
 * Integración externa
 * Migración a AWS
 
 ---
 
-#  Conclusión
+# ✅ Conclusión
 
-Se ha desarrollado una intranet completa integrando múltiples servicios.
+Se ha implementado una intranet completa integrando múltiples servicios reales.
 
-Se han resuelto problemas reales de:
-
-* Correo
-* Permisos
-* Seguridad
-* Configuración
-
- Resultado:
+✔️ Resultado:
 
 * Sistema funcional
 * Escalable
-* Preparado para entornos reales
+* Aplicable en empresa real
 
 ---
