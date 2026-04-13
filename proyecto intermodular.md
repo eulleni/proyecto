@@ -333,37 +333,4 @@ Muy útil para pruebas y administración fuera de clase.
 
 ---
 
-# ⚠️ Problemas y soluciones
-
-### Error Roundcube (Internal Error)
-Solución:
-Configuración manual de base de datos en config.inc.php  
-
----
-
-### Error 404 Roundcube
-sudo ln -s /var/lib/roundcube /var/www/html/roundcube  
-
----
-
-### Error SMTP
-sudo systemctl restart postfix  
-
----
-
-### Error SMTP Authentication failed
-Configuración correcta de usuario SMTP  
-
----
-
-### Problema IP dinámica
-Configuración mediante Netplan  
-
----
-
-### Error MySQL acceso root
-sudo mysql  
-
----
-
 
