@@ -366,30 +366,4 @@ sudo mysql
 
 ---
 
-# 🚧 Mejoras futuras
 
-- Notificaciones automáticas por correo  
-- Sistema de roles  
-- Mejora visual con Bootstrap  
-- Integración con servicios externos  
-- Migración a AWS  
-
----
-
-# ✅ Conclusión
-
-Se ha implementado una intranet completa integrando múltiples servicios reales:
-
-- Administración de usuarios  
-- Servicios web  
-- Sistema de tickets  
-- Correo interno  
-- Acceso remoto  
-
-Además, se han resuelto problemas reales que han permitido adquirir experiencia práctica en administración de sistemas.
-
-Resultado final:
-
-- Sistema funcional  
-- Escalable  
-- Aplicable a entornos empresariales reales  
