@@ -1,9 +1,9 @@
-# 🖥️ Proyecto Intermodular - Intranet Empresarial Linux
+# Proyecto Intermodular - Intranet Empresarial Linux
 
-## 👤 Autor
+## Autor
 
 **Eugenio Requena Castillo**  
-**2º ASIX - IES Serra Perenxisa**
+2º ASIX - IES Serra Perenxisa  
 
 ---
 
@@ -15,322 +15,212 @@
 
 ---
 
-# 🧱 Stack Tecnológico
+# Introducción
 
-| Categoría         | Tecnología           |
-|------------------|----------------------|
-| Sistema Operativo | Ubuntu Server 22.04  |
-| Entorno gráfico   | Xubuntu Desktop      |
-| Web Server        | Apache2              |
-| Backend           | PHP                  |
-| Base de datos     | MySQL / MariaDB      |
-| Gestión DB        | phpMyAdmin           |
-| Administración    | Webmin               |
-| Correo            | Postfix + Dovecot    |
-| Webmail           | Roundcube            |
-| Acceso remoto     | SSH, WinSCP, AnyDesk |
+Este proyecto consiste en el diseño e implementación de una intranet empresarial basada en Linux, integrando múltiples servicios utilizados en entornos profesionales.
+
+El sistema final está compuesto por:
+
+- Un **servidor principal**, encargado de los servicios web, base de datos, correo y administración.
+- Un **servidor de backups**, dedicado exclusivamente al almacenamiento de copias de seguridad.
+
+El objetivo principal es simular el funcionamiento de una empresa real, donde los servicios internos se encuentran organizados, securizados y preparados para facilitar la administración del sistema y la gestión de incidencias.
 
 ---
 
-# 📌 Índice
+# Stack Tecnológico
 
-- Introducción  
-- Instalación del sistema  
-- Entorno gráfico (Xubuntu)  
-- Configuración de red  
-- Gestión de usuarios  
-- Permisos y directorios  
-- Acceso remoto  
-- Servidor web (Apache)  
-- Base de datos  
-- Aplicación web (Sistema de tickets)  
-- Webmin  
-- Sistema de correo  
-- AnyDesk  
-- Problemas y soluciones  
-- Mejoras futuras  
-- Conclusión  
+| Categoría | Tecnología |
+|----------|-----------|
+| Sistema Operativo | Ubuntu Server 22.04 |
+| Entorno gráfico | Xubuntu Desktop |
+| Web Server | Apache2 |
+| Backend | PHP |
+| Base de datos | MySQL / MariaDB |
+| Gestión DB | phpMyAdmin |
+| Administración | Webmin |
+| Correo | Postfix + Dovecot |
+| Webmail | Roundcube |
+| Acceso remoto | SSH, WinSCP |
+| Backups | mysqldump, tar, SCP |
 
 ---
 
-# 🚀 Introducción
+# Configuración de red
 
-Este proyecto consiste en el diseño e implementación de una **intranet empresarial completa basada en Linux**, integrando múltiples servicios reales utilizados en entornos profesionales.
+La arquitectura final del proyecto utiliza **dos adaptadores de red**:
 
-El objetivo principal es simular el funcionamiento de una empresa donde todos los servicios (usuarios, web, correo, administración remota) están centralizados en un único servidor.
+## Adaptador 1: NAT
+Permite acceso a Internet para:
+- Instalación de paquetes
+- Actualizaciones
+- Uso de servicios externos (Gmail SMTP)
 
-El sistema permite:
+## Adaptador 2: Red interna
+Permite la comunicación entre máquinas virtuales.
 
-- Gestión de usuarios y grupos  
-- Control de permisos por departamentos  
-- Administración remota del sistema  
-- Despliegue de aplicaciones web  
-- Sistema de tickets para incidencias  
-- Servicio de correo interno  
+## Direcciones IP finales
 
-Se han utilizado herramientas reales del mundo laboral, con el objetivo de adquirir experiencia práctica en administración de sistemas.
+### Servidor principal
+- 192.168.100.10
 
----
+### Servidor de backups
+- 192.168.100.20
 
-# 💿 Instalación del sistema
-
-Se instaló **Ubuntu Server 22.04 LTS**, seleccionado por su estabilidad, seguridad y uso extendido en entornos profesionales.
-
-Tras la instalación, se actualizó el sistema completamente:
-
-sudo apt update && sudo apt upgrade
-
-Esto garantiza que el sistema esté actualizado y libre de vulnerabilidades.
+Esta arquitectura permite:
+- Separar tráfico interno y externo
+- Mejorar la estabilidad del sistema
+- Simular entorno empresarial real
 
 ---
 
-# 🖥️ Entorno gráfico (Xubuntu)
+# Acceso a los servicios
 
-Se instaló Xubuntu Desktop:
+## Webmin
+https://IP_DEL_SERVIDOR:10000  
+Usuario: admin  
 
-sudo apt install xubuntu-desktop
+## Aplicación Ticketing
+http://IP_DEL_SERVIDOR/tickets  
 
-Se eligió este entorno porque:
+## Roundcube (Correo)
+http://IP_DEL_SERVIDOR/webmail  
 
-- Es ligero  
-- Consume pocos recursos  
-- Permite administración visual  
+## Servidor de backups
+Acceso por SSH:
 
-Se utilizó principalmente para:
-
-- Facilitar la gestión del servidor  
-- Realizar capturas para el proyecto  
-- Permitir acceso remoto gráfico mediante AnyDesk  
-
----
-
-# 🌐 Configuración de red
-
-Se configuró una IP estática mediante Netplan para evitar cambios de dirección IP.
-
-Archivo de configuración:
-
-/etc/netplan/00-installer-config.yaml
-
-Aplicación de cambios:
-
-sudo netplan apply
-
-Esto permite que el servidor tenga siempre la misma IP, lo cual es fundamental para acceder a servicios como:
-
-- Webmin  
-- Apache  
-- Roundcube  
+```bash
+ssh erc01@192.168.100.20
+```
 
 ---
 
-# 👤 Gestión de usuarios
+# Aplicación Web (Sistema de Ticketing)
 
-Inicialmente se utilizó:
+Aplicación desarrollada en PHP y MySQL.
 
-sudo useradd usuario
+## Funcionalidades
 
-Pero este método presenta problemas:
+### Cliente
+- Registro e inicio de sesión
+- Crear tickets
+- Ver estado de incidencias
+- Recuperar contraseña
+- Solicitar actualización
 
-- No crea el directorio /home  
-- No asigna un shell válido  
+### Administrador
+- Ver todos los tickets
+- Editar tickets
+- Cambiar estado
+- Asignar técnico
+- Registrar modificaciones
 
-Por ello, se utilizó Webmin para completar la configuración:
-
-- Creación automática de /home  
-- Asignación del shell `/bin/bash`  
-- Configuración de contraseñas  
-
-Ejemplo de usuario:
-
-sudo adduser cliente1
-
----
-
-# 👥 Permisos y directorios
-
-Se crearon directorios en `/srv` para simular departamentos:
-
-sudo mkdir /srv/ventas  
-sudo chown root:ventas /srv/ventas  
-sudo chmod 770 /srv/ventas  
-
-Explicación:
-
-- `770` → solo el grupo tiene acceso  
-- `root:ventas` → control por grupo  
-
-Esto permite una gestión segura de los datos.
+## Campos incluidos en tickets
+- Empresa
+- Persona de contacto
+- Teléfono
+- Sistema afectado
+- Usuarios afectados
+- Nivel de bloqueo
+- Solución temporal
 
 ---
 
-# 🔐 Acceso remoto
+# Sistema de correo
 
-## SSH
+Se ha implementado un sistema de correo interno con:
 
-Permite administrar el servidor remotamente:
+- Postfix (SMTP)
+- Dovecot (IMAP)
+- Roundcube (webmail)
 
-systemctl status ssh  
+## Correos automáticos
+- Creación de tickets
+- Recuperación de contraseña
+- Solicitudes de actualización
 
-Conexión:
+## Configuración SMTP
 
-ssh usuario@IP
+Se utiliza Gmail como relay:
 
----
-
-## WinSCP
-
-Configuración:
-
-- Protocolo: SFTP  
-- Puerto: 22  
-
-Permite:
-
-- Transferir archivos  
-- Editar directamente en el servidor  
-- Gestionar permisos  
+- Cuenta: eugeenproject@gmail.com
+- Autenticación mediante contraseña de aplicación
 
 ---
 
-# 🌍 Servidor web (Apache)
+# Servidor de copias de seguridad
 
-Instalación:
+Se ha implementado una segunda máquina virtual dedicada a backups.
 
-sudo apt install apache2  
+## Objetivo
+Separar los datos del servidor principal para mayor seguridad.
 
-Comprobación:
-
-systemctl status apache2  
-
-Ruta web:
-
-/var/www/html/
-
-Acceso:
-
-http://IP_DEL_SERVIDOR  
-
-Aquí se alojan:
-
-- phpMyAdmin  
-- Ticketing  
-- Roundcube  
+## Comunicación
+Mediante red interna + SSH
 
 ---
 
-# 🗄️ Base de datos
+## Acceso SSH sin contraseña
 
-Instalación:
-
-sudo apt install mysql-server  
-
-Acceso:
-
-sudo mysql  
-
-phpMyAdmin:
-
-http://IP/phpmyadmin  
-
-Se utilizó para gestionar bases de datos de forma visual.
+```bash
+ssh-keygen
+ssh-copy-id erc01@192.168.100.20
+```
 
 ---
 
-# 🌍 Aplicación web (Sistema de tickets)
+# Script de backup
 
-Ubicación:
+Archivo: backup.sh
 
-/var/www/html/ticketing  
+Funciones:
+1. Backup de base de datos
+2. Compresión de archivos web
+3. Envío al servidor de backups
+4. Limpieza de temporales
 
-Funcionalidades:
-
-- Crear incidencias  
-- Ver estado  
-- Asignar técnicos  
-- Cambiar estado (abierto, en progreso, cerrado)  
-- Prioridad automática  
-
-Panel admin:
-
-/admin_ver.php  
-
-Protegido mediante login.
-
-Simula un sistema real de soporte técnico empresarial.
+```bash
+mysqldump -u backup -p'********' ticketing > ticketing.sql
+tar -czf web.tar.gz /var/www/html/ticketing
+scp ticketing.sql erc01@192.168.100.20:/home/erc01/backups
+scp web.tar.gz erc01@192.168.100.20:/home/erc01/backups
+```
 
 ---
 
-# ⚙️ Webmin
+# Automatización con cron
 
-Acceso:
+```bash
+crontab -e
+```
 
-https://IP:10000  
+```bash
+0 2 * * * /home/erc01/backup.sh
+```
 
-Permite:
-
-- Gestión de usuarios  
-- Configuración de servicios  
-- Monitorización  
-
-Problema encontrado:
-
-Error GPG del repositorio  
-
-Solución:
-
-Actualizar repositorio y clave  
+Backups diarios a las 2:00 AM.
 
 ---
 
-# 📧 Sistema de correo
+# Seguridad
 
-Instalación:
+Medidas implementadas:
 
-sudo apt install postfix dovecot-imapd dovecot-pop3d roundcube  
-
-Componentes:
-
-- Postfix → envío de correos  
-- Dovecot → recepción  
-- Roundcube → interfaz web  
-
-Acceso:
-
-http://IP/roundcube  
+- Uso de usuarios sin root
+- Contraseñas cifradas
+- Control de accesos
+- Backups automatizados
 
 ---
 
-## 📬 Buzones de correo
+# Conclusión
 
-Creación:
+El proyecto representa una simulación de una intranet empresarial, integrando múltiples servicios en un entorno Linux.
 
-adduser usuario  
-maildirmake.dovecot ~/Maildir  
+Se ha conseguido:
 
-Esto permite almacenar correos en formato Maildir.
-
----
-
-# 🖥️ Acceso remoto con AnyDesk
-
-Instalación:
-
-sudo apt install anydesk  
-
-Uso:
-
-- Obtener ID  
-- Conectar desde otro dispositivo  
-
-Permite:
-
-- Control completo del sistema  
-- Acceso desde móvil  
-- Gestión gráfica  
-
-Muy útil para pruebas y administración fuera de clase.
-
----
-
+- Centralizar servicios
+- Automatizar procesos
+- Implementar seguridad básica
+- Desarrollar una aplicación funcional
 
