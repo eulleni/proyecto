@@ -47,8 +47,7 @@ Sistema de ticketing y gestión de incidencias desarrollado sobre una infraestru
 - [Automatización con cron](#automatización-con-cron)
 - [Seguridad aplicada](#seguridad-aplicada)
 - [Problemas encontrados y soluciones](#problemas-encontrados-y-soluciones)
-  
----
+- [Conclusión](#conclusión)
 
 ## Descripción del proyecto
 
@@ -132,7 +131,6 @@ El servidor principal integra varios servicios necesarios para el funcionamiento
 | Administración | Webmin | Gestión del servidor desde navegador |
 | Acceso remoto | SSH / WinSCP / AnyDesk | Administración y transferencia de archivos |
 | Backups | mysqldump, tar.gz, scp y cron | Copias automatizadas al servidor secundario |
-
 ---
 
 ## Aplicación de ticketing
@@ -785,5 +783,3 @@ El proyecto permite simular una infraestructura empresarial real basada en Linux
 La aplicación de ticketing aporta una funcionalidad práctica al sistema, ya que permite gestionar incidencias de forma centralizada y enviar notificaciones automáticas.
 
 Además, la implementación de un servidor de backups independiente mejora la disponibilidad y reduce el riesgo de pérdida de datos.
-
-Aunque se trata de un entorno de laboratorio, la arquitectura utilizada permite plantear una evolución futura hacia entornos más profesionales, incorporando HTTPS, VPN, firewall avanzado, monitorización o despliegue en la nube.
