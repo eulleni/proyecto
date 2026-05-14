@@ -48,10 +48,12 @@ Sistema de ticketing y gestión de incidencias desarrollado sobre una infraestru
 - [Servidor de backups](#servidor-de-backups)
 - [Script de copias de seguridad](#script-de-copias-de-seguridad)
 - [Automatización con cron](#automatización-con-cron)
+- [Restauración de copias de seguridad](#restauración-de-copias-de-seguridad)
 - [Seguridad aplicada](#seguridad-aplicada)
 - [Problemas encontrados y soluciones](#problemas-encontrados-y-soluciones)
 - [Conclusión](#conclusión)
 
+  
 ## Descripción del proyecto
 
 Este proyecto consiste en el diseño e implementación de una **intranet empresarial basada en Linux**, orientada a simular una infraestructura interna de una empresa con servicios web, base de datos, correo, administración remota, sistema de tickets y copias de seguridad automatizadas.
@@ -411,6 +413,14 @@ Desde Webmin se pudieron revisar y modificar datos como:
 ---
 
 ## Sistema de correo interno
+
+### Resolución de nombres
+
+En este proyecto no se ha implementado un servidor DNS con BIND. Para la resolución de nombres dentro del entorno de pruebas se ha utilizado configuración local mediante el archivo `/etc/hosts`, ya que se trata de una intranet simulada.
+
+En un entorno profesional real, sería recomendable implementar un servidor DNS propio para gestionar correctamente los nombres internos de la red.
+
+### Postfix, Dovecot y Roundcube
 
 Para el sistema de correo se instalaron y configuraron los siguientes servicios:
 
