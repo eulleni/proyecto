@@ -8,18 +8,20 @@ Sistema de ticketing y gestión de incidencias desarrollado sobre una infraestru
 
 ## Tecnologías utilizadas
 
-![Ubuntu](https://img.shields.io/badge/Ubuntu_Server-22.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
-![Apache](https://img.shields.io/badge/Apache2-Web-D22128?style=for-the-badge&logo=apache&logoColor=white)
-![PHP](https://img.shields.io/badge/PHP-Backend-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL%2FMariaDB-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Postfix](https://img.shields.io/badge/Postfix-SMTP-2E6DB4?style=for-the-badge)
-![Dovecot](https://img.shields.io/badge/Dovecot-IMAP-0A66C2?style=for-the-badge)
-![Roundcube](https://img.shields.io/badge/Roundcube-Webmail-37A5CC?style=for-the-badge)
-![Webmin](https://img.shields.io/badge/Webmin-Admin-0080FF?style=for-the-badge)
-![phpMyAdmin](https://img.shields.io/badge/phpMyAdmin-Database_Admin-F6C915?style=for-the-badge)
-![SSH](https://img.shields.io/badge/SSH-Remote_Access-4D4D4D?style=for-the-badge&logo=gnubash&logoColor=white)
-![Backups](https://img.shields.io/badge/Backups-Cron%20%2B%20SCP-00B894?style=for-the-badge)
-![VirtualBox](https://img.shields.io/badge/VirtualBox-Virtualization-183A61?style=for-the-badge&logo=virtualbox&logoColor=white)
+| Tecnología | Uso en el proyecto |
+|---|---|
+| ![Ubuntu](https://img.shields.io/badge/Ubuntu_Server-22.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white) | Sistema operativo base utilizado en las máquinas virtuales del proyecto. |
+| ![Apache](https://img.shields.io/badge/Apache2-Web-D22128?style=for-the-badge&logo=apache&logoColor=white) | Servidor web encargado de alojar la aplicación de ticketing. |
+| ![PHP](https://img.shields.io/badge/PHP-Backend-777BB4?style=for-the-badge&logo=php&logoColor=white) | Lenguaje utilizado para desarrollar la lógica de la aplicación web. |
+| ![MySQL](https://img.shields.io/badge/MySQL%2FMariaDB-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white) | Sistema gestor de base de datos utilizado para almacenar usuarios, tickets, técnicos y administradores. |
+| ![Postfix](https://img.shields.io/badge/Postfix-SMTP-2E6DB4?style=for-the-badge) | Servidor SMTP utilizado para el envío de correos electrónicos. |
+| ![Dovecot](https://img.shields.io/badge/Dovecot-IMAP-0A66C2?style=for-the-badge) | Servicio IMAP utilizado para la recepción y consulta de correos. |
+| ![Roundcube](https://img.shields.io/badge/Roundcube-Webmail-37A5CC?style=for-the-badge) | Cliente webmail utilizado para acceder al correo desde el navegador. |
+| ![Webmin](https://img.shields.io/badge/Webmin-Admin-0080FF?style=for-the-badge) | Herramienta de administración web para gestionar usuarios, servicios y configuración del servidor. |
+| ![phpMyAdmin](https://img.shields.io/badge/phpMyAdmin-Database_Admin-F6C915?style=for-the-badge) | Herramienta web utilizada para administrar la base de datos de forma visual. |
+| ![SSH](https://img.shields.io/badge/SSH-Remote_Access-4D4D4D?style=for-the-badge&logo=gnubash&logoColor=white) | Servicio de acceso remoto utilizado para administrar el servidor mediante terminal y WinSCP. |
+| ![Backups](https://img.shields.io/badge/Backups-Cron%20%2B%20SCP-00B894?style=for-the-badge) | Sistema de copias de seguridad automatizadas mediante scripts, cron y transferencia SCP. |
+| ![VirtualBox](https://img.shields.io/badge/VirtualBox-Virtualization-183A61?style=for-the-badge&logo=virtualbox&logoColor=white) | Plataforma de virtualización utilizada para simular el entorno de servidores. |
 
 ---
 
@@ -321,16 +323,21 @@ El campo `password` almacena la contraseña cifrada del administrador.
 
 ### Tabla `tecnicos`
 
-La tabla `tecnicos` almacena los técnicos disponibles para asignar incidencias.
+La tabla `tecnicos` almacena la información de los técnicos disponibles para resolver incidencias.
+
+En la versión final de la aplicación, esta tabla se ha ampliado para que los técnicos puedan tener sus propias credenciales de acceso al sistema.
 
 Campos principales:
 
-- `id`
-- `nombre`
-- `activo`
+- `id`: identificador único del técnico.
+- `nombre`: nombre del técnico.
+- `usuario`: nombre de usuario utilizado para iniciar sesión.
+- `email`: correo electrónico del técnico.
+- `password`: contraseña cifrada del técnico.
+- `debe_cambiar_password`: indica si el técnico debe cambiar su contraseña, útil cuando se crea una cuenta con contraseña temporal.
+- `activo`: indica si el técnico está activo dentro del sistema.
 
-Esto permite controlar qué técnicos pueden ser asignados a los tickets.
-
+Esta tabla permite organizar la asignación de responsables dentro del sistema y controlar qué técnicos pueden acceder a la aplicación.
 ---
 
 ## Acceso a phpMyAdmin
@@ -715,6 +722,72 @@ Explicación:
 | Día de la semana | `*` | Todos los días de la semana |
 
 Gracias a esta automatización, las copias de seguridad se generan y transfieren sin intervención manual.
+
+---
+
+## Restauración de copias de seguridad
+
+Además de generar copias de seguridad automáticas, también se ha comprobado el proceso de restauración para asegurar que la aplicación pueda volver a un estado funcional anterior en caso de fallo.
+
+En este proyecto se trabaja con dos máquinas virtuales:
+
+- La máquina principal contiene Apache, PHP, MySQL/MariaDB y la aplicación de ticketing.
+- La máquina secundaria actúa como servidor de backups, almacenando las copias generadas desde la máquina principal.
+
+Las copias de seguridad incluyen dos partes principales:
+
+- Un archivo `.sql` con la copia de la base de datos `ticketing`.
+- Un archivo `.tar.gz` con la copia comprimida de la carpeta `/var/www/html/ticketing`.
+
+La restauración no se realiza directamente en la máquina secundaria, ya que esta solo actúa como almacén de seguridad. En caso de fallo, los archivos de backup se copian de nuevo a la máquina principal y se restauran allí.
+
+Ejemplo de recuperación de los archivos desde la máquina principal:
+
+~~~bash
+mkdir -p ~/backups_restaurar
+scp erc01@192.168.100.20:~/backups/* ~/backups_restaurar/
+ls -lh ~/backups_restaurar
+~~~
+
+Restauración de la base de datos:
+
+~~~bash
+cd ~/backups_restaurar
+mysql -u ticketuser -p ticketing < nombre_del_backup.sql
+~~~
+
+Restauración de la aplicación web:
+
+~~~bash
+sudo rm -rf /var/www/html/ticketing
+sudo tar -xzvf nombre_del_backup.tar.gz -C /
+~~~
+
+Después de restaurar la carpeta web, se corrigen los permisos para que Apache pueda acceder correctamente:
+
+~~~bash
+sudo chown -R www-data:www-data /var/www/html/ticketing
+sudo chmod -R 755 /var/www/html/ticketing
+sudo systemctl restart apache2
+~~~
+
+Finalmente, se comprueba el acceso a la aplicación:
+
+~~~text
+http://IP_DEL_SERVIDOR/ticketing
+~~~
+
+También se creó un script llamado `restaurar_ticketing.sh`, ejecutado desde la máquina principal, que automatiza varias partes del proceso: copiar backups desde la máquina secundaria, mostrar los archivos disponibles, restaurar la base de datos, restaurar la carpeta web, corregir permisos y reiniciar Apache.
+
+El script se ejecuta con:
+
+~~~bash
+./restaurar_ticketing.sh
+~~~
+
+Durante la ejecución, el script solicita el nombre exacto del archivo `.sql` y del archivo `.tar.gz` que se desea restaurar. Esto permite elegir qué copia de seguridad se quiere recuperar en cada momento.
+
+Este procedimiento demuestra que el sistema no solo genera copias de seguridad, sino que también permite restaurarlas correctamente en caso de fallo.
 
 ---
 
