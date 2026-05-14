@@ -28,6 +28,7 @@ Sistema de ticketing y gestión de incidencias desarrollado sobre una infraestru
 - [Descripción del proyecto](#descripción-del-proyecto)
 - [Objetivos del proyecto](#objetivos-del-proyecto)
 - [Arquitectura general del sistema](#arquitectura-general-del-sistema)
+- [Acceso local a la aplicación](#acceso-local-a-la-aplicación)
 - [Servicios implementados](#servicios-implementados)
 - [Aplicación de ticketing](#aplicación-de-ticketing)
 - [Funcionamiento del sistema de tickets](#funcionamiento-del-sistema-de-tickets)
@@ -112,6 +113,18 @@ IPs utilizadas en la red interna:
 | Servidor de backups | `192.168.100.20` |
 
 Esta separación permite que el servidor principal tenga acceso a Internet cuando sea necesario, pero que la comunicación con el servidor de backups se realice mediante una red interna aislada.
+
+---
+
+## Acceso local a la aplicación
+
+La aplicación de ticketing funciona como una **intranet local** dentro del entorno virtualizado de VirtualBox. Su acceso se realiza desde la propia máquina virtual o desde equipos que tengan conectividad con la red interna configurada para el laboratorio.
+
+El servidor principal puede acceder a Internet mediante el adaptador NAT, lo que permite instalar paquetes, actualizar el sistema y utilizar el relay SMTP de Gmail para enviar correos electrónicos reales al exterior.
+
+Sin embargo, el uso del relay SMTP de Gmail solo permite la salida de correos autenticados desde el servidor. Esta configuración no publica la aplicación web en Internet ni hace que la página sea accesible desde redes externas. Si un correo contiene un enlace hacia una IP interna, ese enlace solo funcionará desde dispositivos que puedan acceder a la misma red local o virtual.
+
+Por tanto, en el estado actual del proyecto, la aplicación se considera una intranet local de pruebas desplegada en VirtualBox. La publicación externa de la web, mediante una configuración de red adecuada, dominio, DNS, HTTPS o despliegue en un servidor/cloud, queda planteada como una posible mejora futura.
 
 ---
 
