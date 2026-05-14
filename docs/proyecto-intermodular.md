@@ -1,4 +1,4 @@
-# Intranet Empresarial en Linux
+﻿# Intranet Empresarial en Linux
 
 Sistema de ticketing y gestión de incidencias desarrollado sobre una infraestructura Linux con servicios web, base de datos, correo, administración remota y backups automatizados.
 
@@ -8,20 +8,18 @@ Sistema de ticketing y gestión de incidencias desarrollado sobre una infraestru
 
 ## Tecnologías utilizadas
 
-| Tecnología | Uso en el proyecto |
-|---|---|
-| ![Ubuntu](https://img.shields.io/badge/Ubuntu_Server-22.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white) | Sistema operativo base utilizado en las máquinas virtuales del proyecto. |
-| ![Apache](https://img.shields.io/badge/Apache2-Web-D22128?style=for-the-badge&logo=apache&logoColor=white) | Servidor web encargado de alojar la aplicación de ticketing. |
-| ![PHP](https://img.shields.io/badge/PHP-Backend-777BB4?style=for-the-badge&logo=php&logoColor=white) | Lenguaje utilizado para desarrollar la lógica de la aplicación web. |
-| ![MySQL](https://img.shields.io/badge/MySQL%2FMariaDB-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white) | Sistema gestor de base de datos utilizado para almacenar usuarios, tickets, técnicos y administradores. |
-| ![Postfix](https://img.shields.io/badge/Postfix-SMTP-2E6DB4?style=for-the-badge) | Servidor SMTP utilizado para el envío de correos electrónicos. |
-| ![Dovecot](https://img.shields.io/badge/Dovecot-IMAP-0A66C2?style=for-the-badge) | Servicio IMAP utilizado para la recepción y consulta de correos. |
-| ![Roundcube](https://img.shields.io/badge/Roundcube-Webmail-37A5CC?style=for-the-badge) | Cliente webmail utilizado para acceder al correo desde el navegador. |
-| ![Webmin](https://img.shields.io/badge/Webmin-Admin-0080FF?style=for-the-badge) | Herramienta de administración web para gestionar usuarios, servicios y configuración del servidor. |
-| ![phpMyAdmin](https://img.shields.io/badge/phpMyAdmin-Database_Admin-F6C915?style=for-the-badge) | Herramienta web utilizada para administrar la base de datos de forma visual. |
-| ![SSH](https://img.shields.io/badge/SSH-Remote_Access-4D4D4D?style=for-the-badge&logo=gnubash&logoColor=white) | Servicio de acceso remoto utilizado para administrar el servidor mediante terminal y WinSCP. |
-| ![Backups](https://img.shields.io/badge/Backups-Cron%20%2B%20SCP-00B894?style=for-the-badge) | Sistema de copias de seguridad automatizadas mediante scripts, cron y transferencia SCP. |
-| ![VirtualBox](https://img.shields.io/badge/VirtualBox-Virtualization-183A61?style=for-the-badge&logo=virtualbox&logoColor=white) | Plataforma de virtualización utilizada para simular el entorno de servidores. |
+![Ubuntu](https://img.shields.io/badge/Ubuntu_Server-22.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+![Apache](https://img.shields.io/badge/Apache2-Web-D22128?style=for-the-badge&logo=apache&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-Backend-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL%2FMariaDB-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Postfix](https://img.shields.io/badge/Postfix-SMTP-2E6DB4?style=for-the-badge)
+![Dovecot](https://img.shields.io/badge/Dovecot-IMAP-0A66C2?style=for-the-badge)
+![Roundcube](https://img.shields.io/badge/Roundcube-Webmail-37A5CC?style=for-the-badge)
+![Webmin](https://img.shields.io/badge/Webmin-Admin-0080FF?style=for-the-badge)
+![phpMyAdmin](https://img.shields.io/badge/phpMyAdmin-Database_Admin-F6C915?style=for-the-badge)
+![SSH](https://img.shields.io/badge/SSH-Remote_Access-4D4D4D?style=for-the-badge&logo=gnubash&logoColor=white)
+![Backups](https://img.shields.io/badge/Backups-Cron%20%2B%20SCP-00B894?style=for-the-badge)
+![VirtualBox](https://img.shields.io/badge/VirtualBox-Virtualization-183A61?style=for-the-badge&logo=virtualbox&logoColor=white)
 
 ---
 
@@ -48,12 +46,10 @@ Sistema de ticketing y gestión de incidencias desarrollado sobre una infraestru
 - [Servidor de backups](#servidor-de-backups)
 - [Script de copias de seguridad](#script-de-copias-de-seguridad)
 - [Automatización con cron](#automatización-con-cron)
-- [Restauración de copias de seguridad](#restauración-de-copias-de-seguridad)
 - [Seguridad aplicada](#seguridad-aplicada)
 - [Problemas encontrados y soluciones](#problemas-encontrados-y-soluciones)
 - [Conclusión](#conclusión)
 
-  
 ## Descripción del proyecto
 
 Este proyecto consiste en el diseño e implementación de una **intranet empresarial basada en Linux**, orientada a simular una infraestructura interna de una empresa con servicios web, base de datos, correo, administración remota, sistema de tickets y copias de seguridad automatizadas.
@@ -113,8 +109,8 @@ IPs utilizadas en la red interna:
 
 | Máquina | IP |
 |---|---|
-| Servidor principal | `192.168.100.10` |
-| Servidor de backups | `192.168.100.20` |
+| Servidor principal | `192.0.2.10` |
+| Servidor de backups | `192.0.2.20` |
 
 Esta separación permite que el servidor principal tenga acceso a Internet cuando sea necesario, pero que la comunicación con el servidor de backups se realice mediante una red interna aislada.
 
@@ -244,7 +240,7 @@ http://IP_DEL_SERVIDOR/ticketing
 En el entorno final del proyecto, usando la red interna, el acceso sería similar a:
 
 ```text
-http://192.168.100.10/ticketing
+http://192.0.2.10/ticketing
 ```
 
 ---
@@ -325,21 +321,16 @@ El campo `password` almacena la contraseña cifrada del administrador.
 
 ### Tabla `tecnicos`
 
-La tabla `tecnicos` almacena la información de los técnicos disponibles para resolver incidencias.
-
-En la versión final de la aplicación, esta tabla se ha ampliado para que los técnicos puedan tener sus propias credenciales de acceso al sistema.
+La tabla `tecnicos` almacena los técnicos disponibles para asignar incidencias.
 
 Campos principales:
 
-- `id`: identificador único del técnico.
-- `nombre`: nombre del técnico.
-- `usuario`: nombre de usuario utilizado para iniciar sesión.
-- `email`: correo electrónico del técnico.
-- `password`: contraseña cifrada del técnico.
-- `debe_cambiar_password`: indica si el técnico debe cambiar su contraseña, útil cuando se crea una cuenta con contraseña temporal.
-- `activo`: indica si el técnico está activo dentro del sistema.
+- `id`
+- `nombre`
+- `activo`
 
-Esta tabla permite organizar la asignación de responsables dentro del sistema y controlar qué técnicos pueden acceder a la aplicación.
+Esto permite controlar qué técnicos pueden ser asignados a los tickets.
+
 ---
 
 ## Acceso a phpMyAdmin
@@ -365,7 +356,7 @@ http://IP_DEL_SERVIDOR/phpmyadmin
 Ejemplo en el entorno del proyecto:
 
 ```text
-http://192.168.100.10/phpmyadmin
+http://192.0.2.10/phpmyadmin
 ```
 
 Durante el desarrollo se utilizó phpMyAdmin para revisar la estructura de la base de datos, comprobar los registros creados por la aplicación y aplicar cambios en las tablas conforme se añadían nuevas funcionalidades.
@@ -397,7 +388,7 @@ https://IP_DEL_SERVIDOR:10000
 Ejemplo:
 
 ```text
-https://192.168.100.10:10000
+https://192.0.2.10:10000
 ```
 
 En el proyecto, Webmin se utilizó especialmente para completar la gestión de usuarios, ya que inicialmente algunos usuarios creados por terminal no tenían correctamente generado su directorio personal o shell de inicio.
@@ -413,14 +404,6 @@ Desde Webmin se pudieron revisar y modificar datos como:
 ---
 
 ## Sistema de correo interno
-
-### Resolución de nombres
-
-En este proyecto no se ha implementado un servidor DNS con BIND. Para la resolución de nombres dentro del entorno de pruebas se ha utilizado configuración local mediante el archivo `/etc/hosts`, ya que se trata de una intranet simulada.
-
-En un entorno profesional real, sería recomendable implementar un servidor DNS propio para gestionar correctamente los nombres internos de la red.
-
-### Postfix, Dovecot y Roundcube
 
 Para el sistema de correo se instalaron y configuraron los siguientes servicios:
 
@@ -449,7 +432,7 @@ http://IP_DEL_SERVIDOR/roundcube
 Ejemplo:
 
 ```text
-http://192.168.100.10/roundcube
+http://192.0.2.10/roundcube
 ```
 
 Desde Roundcube se pueden realizar acciones como:
@@ -501,12 +484,12 @@ La autenticación se configuró mediante el archivo:
 Con una estructura similar a:
 
 ```bash
-[smtp.gmail.com]:587 correo_gmail@gmail.com:CONTRASEÑA_DE_APLICACION
+[smtp.gmail.com]:587 correo.proyecto@example.com:CONTRASEÑA_DE_APLICACION
 ```
 
 En este caso se utilizó:
 ```bash
-[smtp.gmail.com]:587 eugeenproject@gmail.com:CONTRASEÑA_DE_APLICACION
+[smtp.gmail.com]:587 correo.proyecto@example.com:CONTRASEÑA_DE_APLICACION
 ```
 
 Después se generó el archivo de base de datos utilizado por Postfix:
@@ -593,7 +576,7 @@ ssh usuario@IP_DEL_SERVIDOR
 Ejemplo:
 
 ```bash
-ssh erc01@192.168.100.10
+ssh usuario_admin@192.0.2.10
 ```
 
 Además, se utilizó **WinSCP** para transferir archivos desde Windows al servidor Linux mediante SFTP.
@@ -610,9 +593,9 @@ Para acceder con WinSCP se utilizaron datos similares a:
 
 ```text
 Protocolo: SFTP
-Servidor: 192.168.100.10
+Servidor: 192.0.2.10
 Puerto: 22
-Usuario: erc01
+Usuario: usuario_admin
 Contraseña: ********
 ```
 
@@ -650,8 +633,8 @@ El servidor principal y el servidor de backups se comunican mediante una red int
 IPs utilizadas:
 
 ```text
-Servidor principal: 192.168.100.10
-Servidor de backups: 192.168.100.20
+Servidor principal: 192.0.2.10
+Servidor de backups: 192.0.2.20
 ```
 
 Para permitir el envío automático de archivos, se configuró acceso SSH entre ambos servidores.
@@ -665,7 +648,7 @@ ssh-keygen
 Después se copió la clave pública al servidor de backups:
 
 ```bash
-ssh-copy-id erc01@192.168.100.20
+ssh-copy-id usuario_admin@192.0.2.20
 ```
 
 De esta forma, el servidor principal puede enviar los backups al servidor secundario sin necesidad de introducir contraseña manualmente cada vez.
@@ -694,9 +677,9 @@ mysqldump -u backup -p'********' ticketing > ticketing_FECHA.sql
 
 tar -czf web_FECHA.tar.gz /var/www/html/ticketing
 
-scp ticketing_FECHA.sql erc01@192.168.100.20:/home/erc01/backups
+scp ticketing_FECHA.sql usuario_admin@192.0.2.20:/home/usuario_backup/backups
 
-scp web_FECHA.tar.gz erc01@192.168.100.20:/home/erc01/backups
+scp web_FECHA.tar.gz usuario_admin@192.0.2.20:/home/usuario_backup/backups
 ```
 
 Con este sistema se realiza una copia tanto de los datos almacenados en la base de datos como de los archivos necesarios para que la aplicación web pueda restaurarse en caso de fallo.
@@ -716,7 +699,7 @@ crontab -e
 Y se añadió una línea similar a:
 
 ```bash
-0 2 * * * /home/erc01/backup.sh
+0 2 * * * /home/usuario_admin/backup.sh
 ```
 
 Esta línea ejecuta el script `backup.sh` todos los días a las **02:00**.
@@ -732,72 +715,6 @@ Explicación:
 | Día de la semana | `*` | Todos los días de la semana |
 
 Gracias a esta automatización, las copias de seguridad se generan y transfieren sin intervención manual.
-
----
-
-## Restauración de copias de seguridad
-
-Además de generar copias de seguridad automáticas, también se ha comprobado el proceso de restauración para asegurar que la aplicación pueda volver a un estado funcional anterior en caso de fallo.
-
-En este proyecto se trabaja con dos máquinas virtuales:
-
-- La máquina principal contiene Apache, PHP, MySQL/MariaDB y la aplicación de ticketing.
-- La máquina secundaria actúa como servidor de backups, almacenando las copias generadas desde la máquina principal.
-
-Las copias de seguridad incluyen dos partes principales:
-
-- Un archivo `.sql` con la copia de la base de datos `ticketing`.
-- Un archivo `.tar.gz` con la copia comprimida de la carpeta `/var/www/html/ticketing`.
-
-La restauración no se realiza directamente en la máquina secundaria, ya que esta solo actúa como almacén de seguridad. En caso de fallo, los archivos de backup se copian de nuevo a la máquina principal y se restauran allí.
-
-Ejemplo de recuperación de los archivos desde la máquina principal:
-
-~~~bash
-mkdir -p ~/backups_restaurar
-scp erc01@192.168.100.20:~/backups/* ~/backups_restaurar/
-ls -lh ~/backups_restaurar
-~~~
-
-Restauración de la base de datos:
-
-~~~bash
-cd ~/backups_restaurar
-mysql -u ticketuser -p ticketing < nombre_del_backup.sql
-~~~
-
-Restauración de la aplicación web:
-
-~~~bash
-sudo rm -rf /var/www/html/ticketing
-sudo tar -xzvf nombre_del_backup.tar.gz -C /
-~~~
-
-Después de restaurar la carpeta web, se corrigen los permisos para que Apache pueda acceder correctamente:
-
-~~~bash
-sudo chown -R www-data:www-data /var/www/html/ticketing
-sudo chmod -R 755 /var/www/html/ticketing
-sudo systemctl restart apache2
-~~~
-
-Finalmente, se comprueba el acceso a la aplicación:
-
-~~~text
-http://IP_DEL_SERVIDOR/ticketing
-~~~
-
-También se creó un script llamado `restaurar_ticketing.sh`, ejecutado desde la máquina principal, que automatiza varias partes del proceso: copiar backups desde la máquina secundaria, mostrar los archivos disponibles, restaurar la base de datos, restaurar la carpeta web, corregir permisos y reiniciar Apache.
-
-El script se ejecuta con:
-
-~~~bash
-./restaurar_ticketing.sh
-~~~
-
-Durante la ejecución, el script solicita el nombre exacto del archivo `.sql` y del archivo `.tar.gz` que se desea restaurar. Esto permite elegir qué copia de seguridad se quiere recuperar en cada momento.
-
-Este procedimiento demuestra que el sistema no solo genera copias de seguridad, sino que también permite restaurarlas correctamente en caso de fallo.
 
 ---
 
@@ -879,3 +796,4 @@ El proyecto permite simular una infraestructura empresarial real basada en Linux
 La aplicación de ticketing aporta una funcionalidad práctica al sistema, ya que permite gestionar incidencias de forma centralizada y enviar notificaciones automáticas.
 
 Además, la implementación de un servidor de backups independiente mejora la disponibilidad y reduce el riesgo de pérdida de datos.
+
