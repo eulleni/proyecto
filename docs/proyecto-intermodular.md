@@ -6,20 +6,20 @@ Sistema de ticketing y gestión de incidencias desarrollado sobre una infraestru
 
 ---
 
-## Tecnologías utilizadas
-
-![Ubuntu](https://img.shields.io/badge/Ubuntu_Server-22.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
-![Apache](https://img.shields.io/badge/Apache2-Web-D22128?style=for-the-badge&logo=apache&logoColor=white)
-![PHP](https://img.shields.io/badge/PHP-Backend-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL%2FMariaDB-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Postfix](https://img.shields.io/badge/Postfix-SMTP-2E6DB4?style=for-the-badge)
-![Dovecot](https://img.shields.io/badge/Dovecot-IMAP-0A66C2?style=for-the-badge)
-![Roundcube](https://img.shields.io/badge/Roundcube-Webmail-37A5CC?style=for-the-badge)
-![Webmin](https://img.shields.io/badge/Webmin-Admin-0080FF?style=for-the-badge)
-![phpMyAdmin](https://img.shields.io/badge/phpMyAdmin-Database_Admin-F6C915?style=for-the-badge)
-![SSH](https://img.shields.io/badge/SSH-Remote_Access-4D4D4D?style=for-the-badge&logo=gnubash&logoColor=white)
-![Backups](https://img.shields.io/badge/Backups-Cron%20%2B%20SCP-00B894?style=for-the-badge)
-![VirtualBox](https://img.shields.io/badge/VirtualBox-Virtualization-183A61?style=for-the-badge&logo=virtualbox&logoColor=white)
+| Tecnología | Uso en el proyecto |
+|---|---|
+| ![Ubuntu](https://img.shields.io/badge/Ubuntu_Server-22.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white) | Sistema operativo base utilizado en las máquinas virtuales del proyecto. |
+| ![Apache](https://img.shields.io/badge/Apache2-Web-D22128?style=for-the-badge&logo=apache&logoColor=white) | Servidor web encargado de alojar la aplicación de ticketing. |
+| ![PHP](https://img.shields.io/badge/PHP-Backend-777BB4?style=for-the-badge&logo=php&logoColor=white) | Lenguaje utilizado para desarrollar la lógica de la aplicación web. |
+| ![MySQL](https://img.shields.io/badge/MySQL%2FMariaDB-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white) | Sistema gestor de base de datos utilizado para almacenar usuarios, tickets, técnicos y administradores. |
+| ![Postfix](https://img.shields.io/badge/Postfix-SMTP-2E6DB4?style=for-the-badge) | Servidor SMTP utilizado para el envío de correos electrónicos. |
+| ![Dovecot](https://img.shields.io/badge/Dovecot-IMAP-0A66C2?style=for-the-badge) | Servicio IMAP utilizado para la recepción y consulta de correos. |
+| ![Roundcube](https://img.shields.io/badge/Roundcube-Webmail-37A5CC?style=for-the-badge) | Cliente webmail utilizado para acceder al correo desde el navegador. |
+| ![Webmin](https://img.shields.io/badge/Webmin-Admin-0080FF?style=for-the-badge) | Herramienta de administración web para gestionar usuarios, servicios y configuración del servidor. |
+| ![phpMyAdmin](https://img.shields.io/badge/phpMyAdmin-Database_Admin-F6C915?style=for-the-badge) | Herramienta web utilizada para administrar la base de datos de forma visual. |
+| ![SSH](https://img.shields.io/badge/SSH-Remote_Access-4D4D4D?style=for-the-badge&logo=gnubash&logoColor=white) | Servicio de acceso remoto utilizado para administrar el servidor mediante terminal y WinSCP. |
+| ![Backups](https://img.shields.io/badge/Backups-Cron%20%2B%20SCP-00B894?style=for-the-badge) | Sistema de copias de seguridad automatizadas mediante scripts, cron y transferencia SCP. |
+| ![VirtualBox](https://img.shields.io/badge/VirtualBox-Virtualization-183A61?style=for-the-badge&logo=virtualbox&logoColor=white) | Plataforma de virtualización utilizada para simular el entorno de servidores. |
 
 ---
 
