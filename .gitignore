@@ -1,0 +1,26 @@
+# Configuracion local con credenciales reales
+app/db.php
+db.php
+.env
+*.env
+scripts/backup.sh
+scripts/restaurar_ticketing.sh
+
+# Datos reales y volcados locales
+database/seed.sql
+backups/
+backup_actual_antes_restaurar/
+Maildir/
+*.log
+*.tar.gz
+*.zip
+*.sql.gz
+ticketing_*.sql
+web_*.tar.gz
+*_actual_*.sql
+
+# Archivos temporales del sistema/editor
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
