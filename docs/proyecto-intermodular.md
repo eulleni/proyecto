@@ -28,6 +28,7 @@ Sistema de ticketing y gestión de incidencias desarrollado sobre una infraestru
 - [Descripción del proyecto](#descripción-del-proyecto)
 - [Objetivos del proyecto](#objetivos-del-proyecto)
 - [Arquitectura general del sistema](#arquitectura-general-del-sistema)
+- [Estructura del repositorio](#estructura-del-repositorio)
 - [Acceso local a la aplicación](#acceso-local-a-la-aplicación)
 - [Servicios implementados](#servicios-implementados)
 - [Aplicación de ticketing](#aplicación-de-ticketing)
@@ -42,12 +43,11 @@ Sistema de ticketing y gestión de incidencias desarrollado sobre una infraestru
 - [Notificaciones automáticas](#notificaciones-automáticas)
 - [Gestión de usuarios y permisos](#gestión-de-usuarios-y-permisos)
 - [Acceso remoto con SSH y WinSCP](#acceso-remoto-con-ssh-y-winscp)
-- [Acceso remoto con AnyDesk](#acceso-remoto-con-anydesk)
 - [Servidor de backups](#servidor-de-backups)
-- [Script de copias de seguridad](#script-de-copias-de-seguridad)
-- [Automatización con cron](#automatización-con-cron)
+- [Restauración de copias de seguridad](#restauración-de-copias-de-seguridad)
 - [Seguridad aplicada](#seguridad-aplicada)
 - [Problemas encontrados y soluciones](#problemas-encontrados-y-soluciones)
+- [Mejoras futuras](#mejoras-futuras)
 - [Conclusión](#conclusión)
 
 ## Descripción del proyecto
@@ -85,7 +85,7 @@ Los objetivos principales del proyecto son:
 - Organizar usuarios y permisos mediante grupos del sistema.
 - Implementar un servidor independiente de copias de seguridad.
 - Automatizar backups mediante `cron`.
-- Simular una infraestructura empresarial real usando máquinas virtuales.
+- Simular una infraestructura empresarial usando máquinas virtuales.
 
 ---
 
@@ -104,6 +104,7 @@ Para la red se utilizaron dos adaptadores:
 |---|---|
 | NAT | Salida a Internet para actualizaciones, instalación de paquetes y relay SMTP externo |
 | Red interna | Comunicación privada entre el servidor principal y el servidor de backups |
+
 
 IPs utilizadas en la red interna:
 
@@ -255,33 +256,37 @@ La base de datos almacena la información de clientes, tickets, administradores 
 
 | Tabla | Función |
 |---|---|
-| `clientes` | Almacena los usuarios que pueden crear tickets |
-| `tickets` | Almacena las incidencias creadas |
-| `admins` | Almacena los usuarios administradores |
-| `tecnicos` | Almacena los técnicos disponibles para asignar tickets |
+| `clientes` | Almacena los datos de los clientes registrados, que pueden iniciar sesión, crear incidencias y consultar el estado de sus tickets. |
+| `tickets` | Tabla principal de la aplicación. Guarda las incidencias creadas por los clientes, su estado, prioridad, técnico asignado, datos de contacto y seguimiento hasta su cierre. |
+| `admins` | Almacena las cuentas de los administradores, que pueden acceder al panel de gestión para revisar, editar y actualizar tickets. |
+| `tecnicos` | Almacena los datos de los técnicos disponibles, incluyendo su usuario, correo, contraseña cifrada y estado activo para poder asignarlos a incidencias. |
 
-### Tabla `clientes`
+## Tabla `clientes`
 
-La tabla `clientes` almacena los datos de los usuarios registrados en la aplicación.
+La tabla `clientes` almacena los datos de los usuarios registrados en la aplicación que pueden crear y consultar incidencias.
 
-Campos importantes:
+Campos principales:
 
 - `id`
 - `nombre`
 - `apellidos`
 - `email`
-- `empresa`
 - `password`
+- `empresa`
 - `reset_token`
 - `reset_expira`
 
-El campo `password` almacena la contraseña cifrada, mientras que `reset_token` y `reset_expira` se utilizan para el proceso de recuperación de contraseña.
+El campo `id` identifica de forma única a cada cliente. Los campos `nombre`, `apellidos`, `email` y `empresa` guardan la información básica del usuario.
 
-### Tabla `tickets`
+El campo `password` almacena la contraseña cifrada del cliente, evitando guardar contraseñas en texto plano.
 
-La tabla `tickets` es la tabla principal de la aplicación.
+Los campos `reset_token` y `reset_expira` se utilizan en el proceso de recuperación de contraseña. El primero guarda el token temporal de restablecimiento y el segundo indica hasta cuándo es válido.
 
-Campos importantes:
+## Tabla `tickets`
+
+La tabla `tickets` es la tabla principal de la aplicación, ya que almacena las incidencias creadas por los clientes y permite controlar su seguimiento.
+
+Campos principales:
 
 - `id`
 - `titulo`
@@ -305,11 +310,27 @@ Campos importantes:
 - `persona_contacto`
 - `telefono_contacto`
 
-Esta tabla permite controlar todo el ciclo de vida de una incidencia, desde su creación hasta su cierre.
+El campo `id` identifica cada ticket de forma única. Los campos `titulo` y `descripcion` recogen la información principal de la incidencia.
 
-### Tabla `admins`
+El campo `estado` permite controlar la situación del ticket, por ejemplo si está abierto, en progreso o cerrado. El campo `fecha` guarda el momento en el que se creó la incidencia, mientras que `fecha_cierre` permite registrar cuándo fue cerrada.
 
-La tabla `admins` almacena los usuarios administradores del sistema.
+La prioridad del ticket se almacena en el campo `prioridad`, y se calcula a partir de la información introducida por el usuario, como el sistema afectado, el número de usuarios afectados, el nivel de bloqueo y la existencia de una solución temporal.
+
+Los campos `sistema_afectado`, `usuarios_afectados`, `nivel_bloqueo` y `solucion_temporal` permiten recoger información adicional para valorar la gravedad de la incidencia.
+
+Los campos `actualizado_en`, `ultimo_editor_admin` y `nota_edicion_admin` permiten registrar modificaciones realizadas desde la administración, dejando constancia de cuándo se editó el ticket, quién lo modificó y qué comentario se añadió.
+
+Los campos `solicitud_actualizacion` y `fecha_solicitud_actualizacion` permiten guardar las solicitudes de actualización realizadas por el cliente.
+
+El campo `tecnico_asignado` indica qué técnico se encarga de la incidencia. En la versión actual se almacena como texto, aunque en una versión futura podría mejorarse creando una relación directa con la tabla `tecnicos` mediante una clave foránea.
+
+El campo `cliente_id` relaciona cada ticket con el cliente que lo ha creado. De esta forma, un cliente puede tener varios tickets, pero cada ticket pertenece a un único cliente.
+
+Por último, los campos `empresa`, `persona_contacto` y `telefono_contacto` permiten guardar información de contacto asociada a la incidencia.
+
+## Tabla `admins`
+
+La tabla `admins` almacena las cuentas de los administradores del sistema.
 
 Campos principales:
 
@@ -317,20 +338,41 @@ Campos principales:
 - `usuario`
 - `password`
 
-El campo `password` almacena la contraseña cifrada del administrador.
+El campo `id` identifica de forma única a cada administrador. El campo `usuario` se utiliza para iniciar sesión en el panel de administración.
 
-### Tabla `tecnicos`
+El campo `password` almacena la contraseña cifrada del administrador, evitando guardar contraseñas en texto plano.
 
-La tabla `tecnicos` almacena los técnicos disponibles para asignar incidencias.
+Los administradores pueden acceder al panel de gestión para revisar tickets, cambiar estados, asignar técnicos y realizar modificaciones sobre las incidencias.
+## Tabla tecnicos
+
+La tabla `tecnicos` almacena los datos de los técnicos disponibles en el sistema para la asignación de incidencias.
 
 Campos principales:
 
 - `id`
 - `nombre`
+- `usuario`
+- `email`
+- `password`
+- `debe_cambiar_password`
 - `activo`
 
-Esto permite controlar qué técnicos pueden ser asignados a los tickets.
+El campo `usuario` se utiliza para identificar al técnico dentro de la aplicación, mientras que `email` permite asociarle una dirección de correo electrónico. El campo `password` almacena la contraseña cifrada del técnico.
 
+El campo `debe_cambiar_password` sirve para controlar si el técnico debe modificar su contraseña al iniciar sesión, por ejemplo después de la creación inicial de la cuenta. Por último, el campo `activo` permite indicar si el técnico está disponible para ser asignado a tickets.
+
+Esto permite gestionar técnicos dentro del sistema, controlar su acceso y decidir cuáles pueden participar en la resolución de incidencias.
+
+---
+## Nota sobre la normalización de la base de datos
+
+Aunque la estructura actual de la base de datos permite el funcionamiento completo de la aplicación, en una versión futura se podría mejorar su normalización.
+
+Por ejemplo, se podría crear una tabla general de usuarios de la que dependieran clientes, administradores y técnicos, evitando repetir campos como el identificador, el correo electrónico o la contraseña.
+
+También podrían separarse algunos campos de la tabla `tickets`, como el sistema afectado, el departamento o las posibles soluciones, en tablas independientes.
+
+Esto reduciría la repetición de información, facilitaría el mantenimiento y haría que el diseño fuera más escalable.
 ---
 
 ## Acceso a phpMyAdmin
@@ -487,11 +529,6 @@ Con una estructura similar a:
 [smtp.gmail.com]:587 correo.proyecto@example.com:CONTRASEÑA_DE_APLICACION
 ```
 
-En este caso se utilizó:
-```bash
-[smtp.gmail.com]:587 correo.proyecto@example.com:CONTRASEÑA_DE_APLICACION
-```
-
 Después se generó el archivo de base de datos utilizado por Postfix:
 
 ```bash
@@ -593,13 +630,27 @@ Para acceder con WinSCP se utilizaron datos similares a:
 
 ```text
 Protocolo: SFTP
-Servidor: 192.0.2.10
+Servidor: 192.168.56.x
 Puerto: 22
 Usuario: usuario_admin
 Contraseña: ********
 ```
 
 ---
+
+## Adaptador Host-Only para administración desde el equipo anfitrión
+
+Además de los adaptadores utilizados para la conexión a Internet y la comunicación interna entre máquinas virtuales, se añadió un adaptador de red en modo **Host-Only**.
+
+Este adaptador se utilizó principalmente para facilitar la administración de la máquina virtual desde el equipo anfitrión, permitiendo acceder de forma más cómoda mediante herramientas como **SSH**, **WinSCP** o **Webmin**.
+
+La red Host-Only permite que el equipo físico y la máquina virtual puedan comunicarse directamente entre sí, sin exponer necesariamente el servidor a la red externa. En este caso, se utilizó una dirección dentro del rango típico de VirtualBox:
+
+```bash
+192.168.56.X
+```
+
+Gracias a esta configuración, fue posible transferir archivos del proyecto mediante WinSCP y administrar el servidor de forma más sencilla desde el equipo principal.
 
 ## Acceso remoto con AnyDesk
 
@@ -718,6 +769,36 @@ Gracias a esta automatización, las copias de seguridad se generan y transfieren
 
 ---
 
+## Restauración de copias de seguridad
+
+Además de generar copias automáticas, se comprobó el proceso de restauración para verificar que los backups eran útiles en caso de fallo.
+
+La restauración se divide en dos partes:
+
+1. Restaurar la base de datos.
+2. Restaurar los archivos de la aplicación web.
+
+Para restaurar la base de datos se utiliza el archivo `.sql` generado con `mysqldump`:
+
+```bash
+mysql -u usuario -p ticketing < ticketing_FECHA.sql
+```
+
+Para restaurar la aplicación web se descomprime el archivo `.tar.gz` correspondiente:
+
+```bash
+sudo tar -xzf web_FECHA.tar.gz -C /
+```
+
+Después de restaurar los archivos, se revisan los permisos de la carpeta de la aplicación para asegurar que Apache pueda leer correctamente los ficheros:
+
+```bash
+sudo chown -R www-data:www-data /var/www/html/ticketing
+sudo chmod -R 755 /var/www/html/ticketing
+```
+
+Este proceso permite recuperar una versión funcional de la aplicación y de la base de datos en caso de error, pérdida de archivos o fallo durante el desarrollo.
+
 ## Seguridad aplicada
 
 Durante el desarrollo del proyecto se aplicaron varias medidas básicas de seguridad:
@@ -796,4 +877,19 @@ El proyecto permite simular una infraestructura empresarial real basada en Linux
 La aplicación de ticketing aporta una funcionalidad práctica al sistema, ya que permite gestionar incidencias de forma centralizada y enviar notificaciones automáticas.
 
 Además, la implementación de un servidor de backups independiente mejora la disponibilidad y reduce el riesgo de pérdida de datos.
+
+
+## Mejoras futuras
+
+Aunque el proyecto cumple los objetivos principales planteados, existen varias mejoras que podrían aplicarse en una versión futura:
+
+- Publicar la intranet en un servidor cloud o VPS.
+- Configurar un dominio real y certificados HTTPS.
+- Añadir un sistema DNS interno con Bind9 en lugar de depender únicamente de IPs.
+- Mejorar la normalización de la base de datos separando campos como sistemas afectados, soluciones o departamentos en tablas propias.
+- Crear roles más avanzados para administradores, técnicos y clientes.
+- Añadir un historial completo de cambios en los tickets.
+- Implementar copias de seguridad cifradas.
+- Añadir monitorización del servidor y alertas automáticas.
+- Preparar un script de instalación automática para desplegar el proyecto más fácilmente.
 
