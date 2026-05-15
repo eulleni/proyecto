@@ -162,11 +162,11 @@ Para usar backups en un entorno real:
 chmod +x scripts/backup.sh scripts/restaurar_ticketing.sh
 ```
 
-No subas los scripts locales con contrasenas, usuarios reales o IPs privadas.
+No subas los scripts locales con contraseñas, usuarios reales o IPs privadas.
 
 ## Correo
 
-La aplicacion utiliza `mail()` desde PHP mediante `app/mail_helper.php`. Para que las notificaciones y recuperacion de contrasena funcionen, el servidor debe tener un servicio de correo configurado, por ejemplo Postfix con relay SMTP. Si no se configura correo, la aplicacion web puede funcionar, pero no enviara emails reales.
+La aplicacion utiliza `mail()` desde PHP mediante `app/mail_helper.php`. Para que las notificaciones y recuperacion de contraseña funcionen, el servidor debe tener un servicio de correo configurado, por ejemplo Postfix con relay SMTP. Si no se configura correo, la aplicacion web puede funcionar, pero no enviara emails reales.
 
 ## Documentacion completa
 
